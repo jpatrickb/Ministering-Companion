@@ -15,16 +15,26 @@ import fs from "fs";
 // Configure multer for file uploads
 const upload = multer({
   dest: "uploads/",
-  limits: { fileSize: 10 * 1024 * 1024 }, // 10MB limit
+  limits: { fileSize: 25 * 1024 * 1024 }, // 25MB limit
   fileFilter: (req, file, cb) => {
-    const allowedTypes = /wav|mp3|m4a|ogg|webm/;
-    const extname = allowedTypes.test(path.extname(file.originalname).toLowerCase());
-    const mimetype = allowedTypes.test(file.mimetype);
+    // OpenAI Whisper supported formats
+    const allowedMimes = [
+      'audio/flac',
+      'audio/m4a', 
+      'audio/mp3',
+      'audio/mp4',
+      'audio/mpeg',
+      'audio/mpga',
+      'audio/oga',
+      'audio/ogg',
+      'audio/wav',
+      'audio/webm'
+    ];
     
-    if (mimetype && extname) {
-      return cb(null, true);
+    if (allowedMimes.includes(file.mimetype) || file.mimetype.startsWith('audio/')) {
+      cb(null, true);
     } else {
-      cb(new Error("Only audio files are allowed"));
+      cb(new Error('Only audio files supported by OpenAI Whisper are allowed'));
     }
   },
 });
@@ -101,7 +111,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
       res.json(person);
     } catch (error) {
       console.error("Error creating person:", error);
-      res.status(400).json({ message: "Failed to create person", error: error.message });
+      res.status(400).json({ message: "Failed to create person", error: error instanceof Error ? error.message : String(error) });
     }
   });
 
@@ -120,7 +130,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
       res.json(updatedPerson);
     } catch (error) {
       console.error("Error updating person:", error);
-      res.status(400).json({ message: "Failed to update person", error: error.message });
+      res.status(400).json({ message: "Failed to update person", error: error instanceof Error ? error.message : String(error) });
     }
   });
 
@@ -203,7 +213,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
         fs.unlinkSync(req.file.path);
       }
       
-      res.status(500).json({ message: "Failed to transcribe audio", error: error.message });
+      res.status(500).json({ message: "Failed to transcribe audio", error: error instanceof Error ? error.message : String(error) });
     }
   });
 
@@ -220,7 +230,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
       res.json(analysis);
     } catch (error) {
       console.error("Error analyzing entry:", error);
-      res.status(500).json({ message: "Failed to analyze entry", error: error.message });
+      res.status(500).json({ message: "Failed to analyze entry", error: error instanceof Error ? error.message : String(error) });
     }
   });
 
@@ -242,13 +252,13 @@ export async function registerRoutes(app: Express): Promise<Server> {
       
       const entry = await storage.createEntry(entryData);
       
-      // Update person's updated timestamp
-      await storage.updateMinisteredPerson(entryData.personId, { updatedAt: new Date() });
+      // Update person's last interaction (removing updatedAt since it's not in schema)
+      // The database will handle updating timestamps automatically
       
       res.json(entry);
     } catch (error) {
       console.error("Error saving entry:", error);
-      res.status(400).json({ message: "Failed to save entry", error: error.message });
+      res.status(400).json({ message: "Failed to save entry", error: error instanceof Error ? error.message : String(error) });
     }
   });
 
@@ -280,7 +290,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
       res.json(insights);
     } catch (error) {
       console.error("Error generating insights:", error);
-      res.status(500).json({ message: "Failed to generate insights", error: error.message });
+      res.status(500).json({ message: "Failed to generate insights", error: error instanceof Error ? error.message : String(error) });
     }
   });
 
@@ -312,7 +322,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
       res.json(resource);
     } catch (error) {
       console.error("Error creating resource:", error);
-      res.status(400).json({ message: "Failed to create resource", error: error.message });
+      res.status(400).json({ message: "Failed to create resource", error: error instanceof Error ? error.message : String(error) });
     }
   });
 
