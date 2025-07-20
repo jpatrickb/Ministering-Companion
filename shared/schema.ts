@@ -138,3 +138,45 @@ export type InsertMinisteringEntry = z.infer<typeof insertMinisteringEntrySchema
 export type MinisteringEntry = typeof ministeringEntries.$inferSelect;
 export type InsertGospelResource = z.infer<typeof insertGospelResourceSchema>;
 export type GospelResource = typeof gospelResources.$inferSelect;
+
+// Content management tables
+export const appContent = pgTable("app_content", {
+  id: serial("id").primaryKey(),
+  key: varchar("key", { length: 100 }).unique().notNull(),
+  title: varchar("title", { length: 200 }),
+  content: text("content").notNull(),
+  contentType: varchar("content_type", { length: 50 }).default("text").notNull(), // text, html, markdown
+  isActive: boolean("is_active").default(true).notNull(),
+  category: varchar("category", { length: 50 }), // landing, dashboard, resources, etc.
+  sortOrder: integer("sort_order").default(0),
+  createdAt: timestamp("created_at").defaultNow(),
+  updatedAt: timestamp("updated_at").defaultNow(),
+});
+
+export const appSettings = pgTable("app_settings", {
+  id: serial("id").primaryKey(),
+  key: varchar("key", { length: 100 }).unique().notNull(),
+  value: text("value").notNull(),
+  description: text("description"),
+  category: varchar("category", { length: 50 }),
+  isPublic: boolean("is_public").default(false).notNull(), // whether setting is exposed to frontend
+  createdAt: timestamp("created_at").defaultNow(),
+  updatedAt: timestamp("updated_at").defaultNow(),
+});
+
+export const insertAppContentSchema = createInsertSchema(appContent).omit({
+  id: true,
+  createdAt: true,
+  updatedAt: true,
+});
+
+export const insertAppSettingsSchema = createInsertSchema(appSettings).omit({
+  id: true,
+  createdAt: true,
+  updatedAt: true,
+});
+
+export type InsertAppContent = z.infer<typeof insertAppContentSchema>;
+export type AppContent = typeof appContent.$inferSelect;
+export type InsertAppSettings = z.infer<typeof insertAppSettingsSchema>;
+export type AppSettings = typeof appSettings.$inferSelect;

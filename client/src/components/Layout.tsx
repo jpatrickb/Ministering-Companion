@@ -17,12 +17,12 @@ export default function Layout({ children }: LayoutProps) {
   return (
     <div className="min-h-screen flex flex-col bg-slate-50">
       {/* Header */}
-      <header className="bg-gradient-to-r from-amber-50 to-orange-50 shadow-sm border-b border-amber-200">
+      <header className="bg-gradient-to-r from-green-50 to-emerald-50 shadow-sm border-b border-green-200">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center h-16">
             {/* Logo and Title */}
             <div className="flex items-center space-x-3">
-              <div className="w-10 h-10 rounded-full overflow-hidden border-2 border-amber-300">
+              <div className="w-10 h-10 rounded-full overflow-hidden border-2 border-green-300">
                 <img 
                   src={christImage} 
                   alt="Christ's ministry" 
@@ -30,8 +30,8 @@ export default function Layout({ children }: LayoutProps) {
                 />
               </div>
               <div>
-                <h1 className="text-xl font-semibold text-amber-900">Ministering Companion</h1>
-                <p className="text-xs text-amber-700">Following Christ's example of love and service</p>
+                <h1 className="text-xl font-semibold text-green-900">Ministering Companion</h1>
+                <p className="text-xs text-green-700">Following Christ's example of love and service</p>
               </div>
             </div>
 

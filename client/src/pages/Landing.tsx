@@ -1,10 +1,27 @@
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
+import { useQuery } from "@tanstack/react-query";
 import christImage from "@assets/image_1753044442351.png";
 
 export default function Landing() {
+  const { data: content } = useQuery({
+    queryKey: ["/api/content"],
+    queryParams: { category: "landing" },
+    retry: false,
+    select: (data: any[]) => {
+      const contentMap: Record<string, string> = {};
+      data?.forEach(item => {
+        contentMap[item.key] = item.content;
+      });
+      return contentMap;
+    }
+  });
+
+  const heroTitle = content?.["landing-hero-title"] || "Ministering Companion";
+  const heroSubtitle = content?.["landing-hero-subtitle"] || "Following Christ's perfect example of love and service. A sacred tool to help you record, analyze, and enhance your ministering efforts with AI-powered insights and gospel resources.";
+  const ctaButton = content?.["landing-cta-button"] || "Begin Your Sacred Ministry";
   return (
-    <div className="min-h-screen bg-gradient-to-br from-amber-50 via-green-50 to-blue-50">
+    <div className="min-h-screen bg-gradient-to-br from-green-50 via-emerald-50 to-blue-50">
       <div className="container mx-auto px-4 py-16">
         <div className="max-w-4xl mx-auto text-center">
           {/* Hero Section */}
@@ -16,19 +33,18 @@ export default function Landing() {
                 className="w-full h-full object-cover"
               />
             </div>
-            <h1 className="text-4xl md:text-6xl font-bold text-amber-900 mb-6">
-              Ministering Companion
+            <h1 className="text-4xl md:text-6xl font-bold text-green-900 mb-6">
+              {heroTitle}
             </h1>
-            <p className="text-xl text-amber-800 mb-8 max-w-2xl mx-auto">
-              Following Christ's perfect example of love and service. A sacred tool to help you record, 
-              analyze, and enhance your ministering efforts with AI-powered insights and gospel resources.
+            <p className="text-xl text-green-800 mb-8 max-w-2xl mx-auto">
+              {heroSubtitle}
             </p>
             <Button 
               onClick={() => window.location.href = '/api/login'}
               size="lg"
-              className="bg-gradient-to-r from-amber-600 to-orange-600 hover:from-amber-700 hover:to-orange-700 text-white px-8 py-4 text-lg font-semibold shadow-lg"
+              className="bg-gradient-to-r from-green-600 to-emerald-600 hover:from-green-700 hover:to-emerald-700 text-white px-8 py-4 text-lg font-semibold shadow-lg"
             >
-              Begin Your Sacred Ministry
+              {ctaButton}
             </Button>
           </div>
 

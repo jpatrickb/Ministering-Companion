@@ -315,6 +315,48 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+  // Content management routes
+  app.get("/api/content/:key", async (req, res) => {
+    try {
+      const content = await storage.getContentByKey(req.params.key);
+      if (!content) {
+        return res.status(404).json({ message: "Content not found" });
+      }
+      res.json(content);
+    } catch (error) {
+      console.error("Error fetching content:", error);
+      res.status(500).json({ message: "Failed to fetch content" });
+    }
+  });
+
+  app.get("/api/content", async (req, res) => {
+    try {
+      const { category } = req.query;
+      let content;
+      
+      if (category) {
+        content = await storage.getContentByCategory(category as string);
+      } else {
+        content = await storage.getAllContent();
+      }
+      
+      res.json(content);
+    } catch (error) {
+      console.error("Error fetching content:", error);
+      res.status(500).json({ message: "Failed to fetch content" });
+    }
+  });
+
+  app.get("/api/settings/public", async (req, res) => {
+    try {
+      const settings = await storage.getPublicSettings();
+      res.json(settings);
+    } catch (error) {
+      console.error("Error fetching public settings:", error);
+      res.status(500).json({ message: "Failed to fetch settings" });
+    }
+  });
+
   app.post("/api/resources", isAuthenticated, async (req: any, res) => {
     try {
       const resourceData = insertGospelResourceSchema.parse(req.body);

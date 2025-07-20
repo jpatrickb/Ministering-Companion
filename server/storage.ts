@@ -3,6 +3,8 @@ import {
   ministeredPersons,
   ministeringEntries,
   gospelResources,
+  appContent,
+  appSettings,
   type User,
   type UpsertUser,
   type InsertMinisteredPerson,
@@ -11,6 +13,10 @@ import {
   type MinisteringEntry,
   type InsertGospelResource,
   type GospelResource,
+  type InsertAppContent,
+  type AppContent,
+  type InsertAppSettings,
+  type AppSettings,
 } from "@shared/schema";
 import { db } from "./db";
 import { eq, desc, and } from "drizzle-orm";
@@ -39,6 +45,19 @@ export interface IStorage {
   getGospelResources(): Promise<GospelResource[]>;
   getFeaturedResources(): Promise<GospelResource[]>;
   createGospelResource(resource: InsertGospelResource): Promise<GospelResource>;
+
+  // Content management operations
+  getContentByKey(key: string): Promise<AppContent | undefined>;
+  getContentByCategory(category: string): Promise<AppContent[]>;
+  getAllContent(): Promise<AppContent[]>;
+  createContent(content: InsertAppContent): Promise<AppContent>;
+  updateContent(id: number, content: Partial<InsertAppContent>): Promise<AppContent>;
+  
+  // Settings operations
+  getSettingByKey(key: string): Promise<AppSettings | undefined>;
+  getPublicSettings(): Promise<AppSettings[]>;
+  createSetting(setting: InsertAppSettings): Promise<AppSettings>;
+  updateSetting(id: number, setting: Partial<InsertAppSettings>): Promise<AppSettings>;
 }
 
 export class DatabaseStorage implements IStorage {
@@ -167,6 +186,82 @@ export class DatabaseStorage implements IStorage {
       .values(resource)
       .returning();
     return newResource;
+  }
+
+  // Content management operations
+  async getContentByKey(key: string): Promise<AppContent | undefined> {
+    const [content] = await db
+      .select()
+      .from(appContent)
+      .where(and(eq(appContent.key, key), eq(appContent.isActive, true)));
+    return content;
+  }
+
+  async getContentByCategory(category: string): Promise<AppContent[]> {
+    return await db
+      .select()
+      .from(appContent)
+      .where(and(eq(appContent.category, category), eq(appContent.isActive, true)))
+      .orderBy(appContent.sortOrder, appContent.title);
+  }
+
+  async getAllContent(): Promise<AppContent[]> {
+    return await db
+      .select()
+      .from(appContent)
+      .where(eq(appContent.isActive, true))
+      .orderBy(appContent.category, appContent.sortOrder, appContent.title);
+  }
+
+  async createContent(content: InsertAppContent): Promise<AppContent> {
+    const [newContent] = await db
+      .insert(appContent)
+      .values(content)
+      .returning();
+    return newContent;
+  }
+
+  async updateContent(id: number, content: Partial<InsertAppContent>): Promise<AppContent> {
+    const [updatedContent] = await db
+      .update(appContent)
+      .set({ ...content, updatedAt: new Date() })
+      .where(eq(appContent.id, id))
+      .returning();
+    return updatedContent;
+  }
+
+  // Settings operations
+  async getSettingByKey(key: string): Promise<AppSettings | undefined> {
+    const [setting] = await db
+      .select()
+      .from(appSettings)
+      .where(eq(appSettings.key, key));
+    return setting;
+  }
+
+  async getPublicSettings(): Promise<AppSettings[]> {
+    return await db
+      .select()
+      .from(appSettings)
+      .where(eq(appSettings.isPublic, true))
+      .orderBy(appSettings.category, appSettings.key);
+  }
+
+  async createSetting(setting: InsertAppSettings): Promise<AppSettings> {
+    const [newSetting] = await db
+      .insert(appSettings)
+      .values(setting)
+      .returning();
+    return newSetting;
+  }
+
+  async updateSetting(id: number, setting: Partial<InsertAppSettings>): Promise<AppSettings> {
+    const [updatedSetting] = await db
+      .update(appSettings)
+      .set({ ...setting, updatedAt: new Date() })
+      .where(eq(appSettings.id, id))
+      .returning();
+    return updatedSetting;
   }
 }
 
