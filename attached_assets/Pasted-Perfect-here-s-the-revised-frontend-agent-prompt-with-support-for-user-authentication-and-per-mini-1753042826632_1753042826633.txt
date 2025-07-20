@@ -1,0 +1,188 @@
+Perfect — here’s the revised frontend agent prompt with support for user authentication and per-ministered-person logging, based on Replit’s built-in auth and database features.
+
+⸻
+
+🧩 Prompt: Frontend for “Ministering Companion” App (With Login + Per-Person Logs)
+
+You are tasked with building the frontend for a web app called Ministering Companion in React with TailwindCSS. This app allows users to log in and record, view, and manage voice-based ministering insights for each person or family they minister to.
+
+This project will be built in Replit, using:
+	•	Replit’s authentication system (for login)
+	•	Replit’s built-in database (for basic data persistence via API)
+
+⸻
+
+🛠️ Tech Stack Requirements:
+	•	React (functional components)
+	•	TailwindCSS for styling
+	•	axios for API calls
+	•	react-router-dom for routing
+	•	Assume use of Replit’s login widget and DB endpoints
+
+⸻
+
+✅ Core Features to Implement:
+
+🔐 1. Authentication (Replit Auth)
+	•	Use Replit’s auth system to let users log in
+	•	Display:
+	•	User’s name / avatar if logged in
+	•	“Sign in” button if not authenticated
+	•	On login, route to /dashboard
+
+You can get user info via:
+
+import { getUserInfo } from '@replit/extensions';
+
+const user = await getUserInfo(); // includes user.id, name, etc.
+
+
+⸻
+
+👤 2. Ministered Persons Management (/dashboard)
+
+Display a list of people/families the user ministers to:
+	•	Button: "Add New Person" → prompts for name and tags
+	•	Each person card has:
+	•	Name
+	•	Summary snippet from most recent entry
+	•	Button: "View Entries" → routes to /person/:id
+
+✅ On load, call:
+
+GET /api/people?user_id=<current_user_id>
+
+✅ Add new person:
+
+POST /api/people
+Body: {
+  user_id: string,
+  name: string,
+  tags: string[]
+}
+
+
+⸻
+
+🎙️ 3. Voice Recording for a Person (/person/:id/record)
+	•	Mic interface to record
+	•	Optional text: date, tags, notes
+
+✅ On submit:
+
+POST /api/transcribe
+Body: FormData {
+  user_id: string,
+  person_id: string,
+  audio: File,
+  date: string,
+  notes: string
+}
+Response: {
+  transcript: string
+}
+
+➡️ Route to /person/:id/review with transcript
+
+⸻
+
+✍️ 4. Review Transcription (/person/:id/review)
+	•	Edit transcript
+	•	Submit for analysis
+
+✅ Submit to backend:
+
+POST /api/analyze
+Body: {
+  user_id: string,
+  person_id: string,
+  transcript: string,
+  date: string,
+  notes: string
+}
+Response: {
+  summary: string,
+  followups: string[],
+  scriptures: string[],
+  talks: string[]
+}
+
+➡️ Route to /person/:id/summary
+
+⸻
+
+📄 5. Summary View (/person/:id/summary)
+	•	Show AI-generated summary
+	•	Follow-up actions
+	•	Linked gospel resources
+
+✅ On “Save Entry”:
+
+POST /api/save_entry
+Body: {
+  user_id: string,
+  person_id: string,
+  date: string,
+  transcript: string,
+  summary: string,
+  followups: string[],
+  scriptures: string[],
+  talks: string[]
+}
+
+
+⸻
+
+📚 6. View Past Entries (/person/:id)
+	•	List of entries for that person
+	•	Date
+	•	Summary preview
+	•	Click to view full log
+
+✅ Fetch entries:
+
+GET /api/entries?user_id=<id>&person_id=<id>
+
+✅ View specific entry:
+
+GET /api/entries/:entry_id
+
+
+⸻
+
+🗂️ 7. Resource Library (/resources)
+	•	Static gospel links
+	•	Talk recommendations
+	•	Service ideas
+
+✅ Fetch:
+
+GET /api/resources
+
+
+⸻
+
+🧭 Routing Table
+
+Route	Component
+/	Login / redirect
+/dashboard	List of people
+/person/:id	Past entries for one person
+/person/:id/record	Record new entry
+/person/:id/review	Edit transcription
+/person/:id/summary	View summary and save
+/resources	Gospel resources
+
+
+⸻
+
+✅ Notes to Agent
+	•	Store user info (e.g. user_id) in React context or state
+	•	Show loading and error states for all API calls
+	•	Use clean and friendly UI, styled with Tailwind
+	•	Prioritize mobile responsiveness
+	•	Integrate Replit auth before allowing access to protected routes
+
+⸻
+
+Would you like me to generate a full folder structure and component breakdown for this next?
