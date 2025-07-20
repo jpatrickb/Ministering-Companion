@@ -2,7 +2,16 @@
 
 ## Overview
 
-Ministering Companion is a full-stack web application built for LDS (Latter-day Saint) members to manage and track their ministering responsibilities. The app enables users to record voice-based ministering visits, receive AI-powered insights and suggestions, and access gospel resources to better serve those they minister to.
+Ministering Companion is a Christ-centered full-stack web application built for LDS (Latter-day Saint) members to manage and track their ministering responsibilities. The app enables users to record voice-based ministering visits, receive AI-powered insights and suggestions, and access gospel resources to better serve those they minister to.
+
+## Recent Changes (January 20, 2025)
+
+✓ Integrated sacred Christ image throughout the application for spiritual inspiration
+✓ Updated color scheme to warm amber/orange tones reflecting Christ's love and ministry
+✓ Enhanced Landing page with Christ's image as centerpiece
+✓ Modified Dashboard and Layout components to incorporate sacred imagery
+✓ Fixed audio transcription format compatibility issues (in progress)
+✓ Added Christ-inspired color palette to CSS variables
 
 ## User Preferences
 

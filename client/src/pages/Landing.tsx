@@ -1,30 +1,34 @@
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
+import christImage from "@assets/image_1753044442351.png";
 
 export default function Landing() {
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-50 to-blue-50">
+    <div className="min-h-screen bg-gradient-to-br from-amber-50 via-green-50 to-blue-50">
       <div className="container mx-auto px-4 py-16">
         <div className="max-w-4xl mx-auto text-center">
           {/* Hero Section */}
           <div className="mb-16">
-            <div className="w-20 h-20 bg-faith-blue rounded-2xl flex items-center justify-center mx-auto mb-6">
-              <i className="fas fa-hands-helping text-white text-3xl"></i>
+            <div className="w-32 h-32 mx-auto mb-6 rounded-full overflow-hidden shadow-xl border-4 border-white">
+              <img 
+                src={christImage} 
+                alt="Christ ministering with love" 
+                className="w-full h-full object-cover"
+              />
             </div>
-            <h1 className="text-4xl md:text-6xl font-bold text-slate-900 mb-6">
+            <h1 className="text-4xl md:text-6xl font-bold text-amber-900 mb-6">
               Ministering Companion
             </h1>
-            <p className="text-xl text-slate-600 mb-8 max-w-2xl mx-auto">
-              Strengthen relationships through inspired ministering. Record visits, 
-              receive AI-powered insights, and access gospel resources to better 
-              serve those you minister to.
+            <p className="text-xl text-amber-800 mb-8 max-w-2xl mx-auto">
+              Following Christ's perfect example of love and service. A sacred tool to help you record, 
+              analyze, and enhance your ministering efforts with AI-powered insights and gospel resources.
             </p>
             <Button 
               onClick={() => window.location.href = '/api/login'}
               size="lg"
-              className="bg-faith-blue hover:bg-blue-700 text-white px-8 py-4 text-lg font-semibold"
+              className="bg-gradient-to-r from-amber-600 to-orange-600 hover:from-amber-700 hover:to-orange-700 text-white px-8 py-4 text-lg font-semibold shadow-lg"
             >
-              Sign In to Get Started
+              Begin Your Sacred Ministry
             </Button>
           </div>
 

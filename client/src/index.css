@@ -24,11 +24,15 @@
   --ring: hsl(20, 14.3%, 4.1%);
   --radius: 0.5rem;
   
-  /* Faith-centered custom colors */
+  /* Christ-inspired colors from sacred image */
   --faith-blue: hsl(217, 91%, 60%);
   --faith-green: hsl(158, 64%, 52%);
   --faith-red: hsl(0, 84%, 60%);
   --warm-yellow: hsl(45, 93%, 76%);
+  --christ-amber: hsl(36, 95%, 45%);
+  --christ-brown: hsl(30, 78%, 28%);
+  --christ-green: hsl(65, 57%, 35%);
+  --sacred-gold: hsl(48, 95%, 52%);
 }
 
 .dark {

@@ -6,6 +6,7 @@ import PersonCard from "@/components/PersonCard";
 import AddPersonModal from "@/components/AddPersonModal";
 import { useAuth } from "@/hooks/useAuth";
 import { MinisteredPerson, User } from "@shared/schema";
+import christImage from "@assets/image_1753044442351.png";
 
 export default function Dashboard() {
   const { user } = useAuth() as { user: User | null };
@@ -40,12 +41,19 @@ export default function Dashboard() {
   return (
     <div className="space-y-8">
       {/* Welcome Section */}
-      <div className="bg-gradient-to-r from-faith-blue to-faith-green rounded-xl p-6 text-white">
+      <div className="bg-gradient-to-r from-amber-600 to-orange-600 rounded-xl p-6 text-white relative overflow-hidden">
+        <div className="absolute top-4 right-4 w-16 h-16 rounded-full overflow-hidden border-2 border-white/30">
+          <img 
+            src={christImage} 
+            alt="Christ's example" 
+            className="w-full h-full object-cover opacity-70"
+          />
+        </div>
         <h2 className="text-2xl font-semibold mb-2">
           Welcome back, {user?.firstName || "Friend"}
         </h2>
-        <p className="text-blue-100 mb-4">
-          Continue building meaningful relationships through inspired ministering
+        <p className="text-amber-100 mb-4">
+          Following Christ's example of love and service through inspired ministering
         </p>
         <div className="flex flex-wrap gap-4 text-sm">
           <div className="flex items-center">
