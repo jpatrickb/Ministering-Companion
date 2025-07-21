@@ -16,6 +16,9 @@ Ministering Companion is a Christ-centered full-stack web application built for 
 ✓ Implemented content seeding system with initial sacred messaging
 ✓ Updated Landing and Dashboard pages to load text content from database
 ✓ Added Christ-inspired green color palette to CSS variables
+✓ Added Google Speech-to-Text as free alternative to OpenAI Whisper
+✓ Created unified transcription service with configurable providers
+✓ Added comprehensive setup guide for Google Cloud Speech-to-Text
 
 ## User Preferences
 
@@ -61,7 +64,9 @@ Preferred communication style: Simple, everyday language.
 
 ### Voice Recording & AI Integration
 - Browser-based voice recording using MediaRecorder API
-- OpenAI Whisper API for audio transcription
+- **Configurable transcription providers**: OpenAI Whisper or Google Speech-to-Text
+- **Google Speech-to-Text**: Free tier with 60 minutes per month
+- **OpenAI Whisper**: Paid service with high accuracy
 - GPT-4 for analyzing visits and generating insights
 - Automatic suggestions for follow-ups, scriptures, and resources
 
@@ -75,7 +80,7 @@ Preferred communication style: Simple, everyday language.
 1. **Authentication**: User logs in through Replit auth, session created
 2. **Dashboard**: User views list of ministered persons with summary data
 3. **Visit Recording**: User records audio of ministering visit
-4. **Transcription**: Audio sent to OpenAI Whisper for transcription
+4. **Transcription**: Audio sent to configured provider (OpenAI Whisper or Google Speech-to-Text)
 5. **Analysis**: Transcript analyzed by GPT-4 for insights and suggestions
 6. **Storage**: Visit data, transcript, and insights stored in database
 7. **Resources**: AI-suggested gospel resources displayed to user
@@ -85,7 +90,10 @@ Preferred communication style: Simple, everyday language.
 ### Required Services
 - **Replit Authentication**: OIDC provider for user authentication
 - **PostgreSQL Database**: Primary data storage (via Neon serverless)
-- **OpenAI API**: Audio transcription (Whisper) and text analysis (GPT-4)
+- **Transcription Service**: Choose one:
+  - **Google Speech-to-Text**: Free tier (60 min/month) + paid options
+  - **OpenAI Whisper**: Paid service with high accuracy
+- **OpenAI GPT-4**: Text analysis for insights and suggestions
 
 ### Key Libraries
 - **@neondatabase/serverless**: PostgreSQL connection with WebSocket support
@@ -93,6 +101,8 @@ Preferred communication style: Simple, everyday language.
 - **@tanstack/react-query**: Server state management and caching
 - **passport & openid-client**: Authentication strategy implementation
 - **multer**: File upload handling for audio recordings
+- **@google-cloud/speech**: Google Cloud Speech-to-Text integration
+- **openai**: OpenAI API client for Whisper and GPT-4
 
 ### Development Tools
 - **Vite**: Fast development server and build tool
@@ -105,7 +115,10 @@ Preferred communication style: Simple, everyday language.
 ### Environment Variables
 - `DATABASE_URL`: PostgreSQL connection string
 - `SESSION_SECRET`: Session encryption key
-- `OPENAI_API_KEY`: OpenAI API access
+- `TRANSCRIPTION_PROVIDER`: Set to `openai` or `google`
+- `OPENAI_API_KEY`: OpenAI API access (required for OpenAI provider)
+- `GOOGLE_APPLICATION_CREDENTIALS`: Path to Google service account key (required for Google provider)
+- `GOOGLE_CLOUD_PROJECT`: Google Cloud project ID (alternative to credentials file)
 - `REPLIT_DOMAINS`: Allowed domains for OIDC
 - `ISSUER_URL`: OIDC issuer endpoint
 

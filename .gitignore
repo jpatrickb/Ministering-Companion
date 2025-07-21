@@ -4,3 +4,10 @@ dist
 server/public
 vite.config.ts.*
 *.tar.gz
+
+# Environment and credentials
+.env
+.env.local
+.env.production
+credentials/
+*.json

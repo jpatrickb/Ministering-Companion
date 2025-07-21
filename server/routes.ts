@@ -7,17 +7,18 @@ import {
   insertMinisteringEntrySchema,
   insertGospelResourceSchema 
 } from "@shared/schema";
-import { transcribeAudio, analyzeMinisteringEntry, generateInsights } from "./services/openai";
+import { transcribeAudio } from "./services/transcription.js";
+import { analyzeMinisteringEntry, generateInsights } from "./services/openai.js";
 import multer from "multer";
-import path from "path";
-import fs from "fs";
+import * as path from "path";
+import * as fs from "fs";
 
 // Configure multer for file uploads
 const upload = multer({
   dest: "uploads/",
   limits: { fileSize: 25 * 1024 * 1024 }, // 25MB limit
   fileFilter: (req, file, cb) => {
-    // OpenAI Whisper supported formats
+    // Supported audio formats for both OpenAI and Google transcription
     const allowedMimes = [
       'audio/flac',
       'audio/m4a', 
@@ -34,7 +35,7 @@ const upload = multer({
     if (allowedMimes.includes(file.mimetype) || file.mimetype.startsWith('audio/')) {
       cb(null, true);
     } else {
-      cb(new Error('Only audio files supported by OpenAI Whisper are allowed'));
+      cb(new Error('Only supported audio file formats are allowed'));
     }
   },
 });
