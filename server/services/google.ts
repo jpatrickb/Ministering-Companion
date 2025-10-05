@@ -1,6 +1,19 @@
 import { SpeechClient } from '@google-cloud/speech';
 import * as fs from 'fs';
 import * as path from 'path';
+import os from 'os';
+
+// Support credentials via GOOGLE_APPLICATION_CREDENTIALS_JSON
+if (process.env.GOOGLE_APPLICATION_CREDENTIALS_JSON && !process.env.GOOGLE_APPLICATION_CREDENTIALS) {
+  try {
+    const credsPath = path.join(os.tmpdir(), 'gcp-sa.json');
+    fs.writeFileSync(credsPath, process.env.GOOGLE_APPLICATION_CREDENTIALS_JSON, { encoding: 'utf-8' });
+    process.env.GOOGLE_APPLICATION_CREDENTIALS = credsPath;
+    console.log('Wrote Google credentials JSON to temp file for Speech-to-Text');
+  } catch (e) {
+    console.warn('Failed to write GOOGLE_APPLICATION_CREDENTIALS_JSON to temp file:', e);
+  }
+}
 
 const client = new SpeechClient();
 

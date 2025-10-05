@@ -8,7 +8,7 @@ import {
   insertGospelResourceSchema 
 } from "@shared/schema";
 import { transcribeAudio } from "./services/transcription.js";
-import { analyzeMinisteringEntry, generateInsights } from "./services/openai.js";
+import { analyzeMinisteringEntry, generateInsights } from "./services/google-llm.js";
 import multer from "multer";
 import * as path from "path";
 import * as fs from "fs";

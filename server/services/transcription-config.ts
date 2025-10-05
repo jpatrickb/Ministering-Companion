@@ -18,10 +18,10 @@ export function validateTranscriptionConfig(): void {
       throw new Error('OPENAI_API_KEY environment variable is required when using OpenAI transcription');
     }
   } else if (provider === 'google') {
-    if (!process.env.GOOGLE_APPLICATION_CREDENTIALS && !process.env.GOOGLE_CLOUD_PROJECT) {
+    if (!process.env.GOOGLE_APPLICATION_CREDENTIALS && !process.env.GOOGLE_CLOUD_PROJECT && !process.env.GOOGLE_APPLICATION_CREDENTIALS_JSON) {
       throw new Error(
         'Google Cloud credentials are required when using Google transcription. ' +
-        'Set GOOGLE_APPLICATION_CREDENTIALS or GOOGLE_CLOUD_PROJECT environment variables.'
+        'Set GOOGLE_APPLICATION_CREDENTIALS, GOOGLE_APPLICATION_CREDENTIALS_JSON, or GOOGLE_CLOUD_PROJECT environment variables.'
       );
     }
   } else {
